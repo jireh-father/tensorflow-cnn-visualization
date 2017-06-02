@@ -87,7 +87,7 @@ with tf.Session() as sess:
 
 ## Test
 
-```
+```shell
 python mnist_test.py --summary_path=yourpath
 
 # after training
