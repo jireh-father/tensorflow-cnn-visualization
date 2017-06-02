@@ -75,5 +75,10 @@ with tf.Session() as sess:
 
 python mnist_test.py --summary_path=yourpath
 
+# after training
+cd yourpath
+
+tensorboard --logdir=./ --host=0.0.0.0
+
 
 ```
