@@ -67,3 +67,13 @@ with tf.Session() as sess:
     writer.add_summary(summary, 0)
     writer.close()
 ```
+
+
+## Test
+
+```
+
+python mnist_test.py --summary_path=yourpath
+
+
+```
