@@ -12,14 +12,14 @@ tf.app.flags.DEFINE_string('summary_path', "/tmp/summary", "summary path")
 image_size = 28
 image_channel = 1
 label_cnt = 10
-num_epochs = 10
+num_epochs = 4
 batch_size = 64
 
 inputs = tf.placeholder(tf.float16, [batch_size, image_size, image_size, image_channel])
 labels = tf.placeholder(tf.int64, [batch_size, ])
 
 conv1_weights = tf.Variable(tf.truncated_normal([5, 5, image_channel, 32], stddev=0.1, dtype=tf.float16))
-visualizer.summary_first_filters(conv1_weights)
+visualizer.summary_first_filters(conv1_weights, 32)
 conv1_biases = tf.Variable(tf.zeros([32], dtype=tf.float16))
 conv2_weights = tf.Variable(tf.truncated_normal([5, 5, 32, 64], stddev=0.1, dtype=tf.float16))
 conv2_biases = tf.Variable(tf.constant(0.1, shape=[64], dtype=tf.float16))
@@ -77,7 +77,7 @@ with tf.Session() as sess:
                    1000 * elapsed_time / 100))
             print('Minibatch loss: %.3f' % loss_result)
     validation_sample = validation_data[0:batch_size]
-    visualizer.summary_feature_maps(validation_sample, inputs, end_points, sess)
+    visualizer.summary_feature_maps(validation_sample, inputs, end_points, sess, 3, 10)
 
     merged = tf.summary.merge_all()
     if not os.path.isdir(FLAGS.summary_path):
