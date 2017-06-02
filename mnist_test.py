@@ -76,13 +76,13 @@ with tf.Session() as sess:
                   (step, float(step) * batch_size / train_size,
                    1000 * elapsed_time / 100))
             print('Minibatch loss: %.3f' % loss_result)
-
-    visualizer.summary_feature_maps(validation_data[0:batch_size], inputs, end_points, sess)
+    validation_sample = validation_data[0:batch_size]
+    visualizer.summary_feature_maps(validation_sample, inputs, end_points, sess)
 
     merged = tf.summary.merge_all()
     if not os.path.isdir(FLAGS.summary_path):
         os.makedirs(FLAGS.summary_path)
     writer = tf.summary.FileWriter(FLAGS.summary_path)
-    summary = sess.run(merged, feed_dict={inputs: validation_data[0:16]})
+    summary = sess.run(merged, feed_dict={inputs: validation_sample})
     writer.add_summary(summary, 0)
     writer.close()
