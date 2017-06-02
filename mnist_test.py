@@ -39,7 +39,7 @@ end_points["conv2"] = conv
 pool = tf.nn.max_pool(relu, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 end_points["pool2"] = pool
 pool_shape = pool.get_shape().as_list()
-reshape = tf.reshape(pool, [pool_shape[0], pool_shape[1] * pool_shape[2] * pool_shape[3]])
+reshape = tf.reshape(pool, [pool_shape[0], pool_shape[1] * pool_shape[2] * pool_shape[3]], name="pool2_reshape")
 hidden = tf.nn.relu(tf.matmul(reshape, fc1_weights) + fc1_biases)
 
 hidden = tf.nn.dropout(hidden, 0.5)
