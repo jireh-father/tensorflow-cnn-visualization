@@ -1,9 +1,12 @@
 # tensorflow-cnn-visualization
-Visualizing cnn layer activations and first filters on tensorboard.
+Visualizing cnn feature maps and filters on tensorboard.
 
 ## Usage
 
-### Visualize feature maps(activations of convolutional layers) on TensorBoard
+### Visualize feature maps(activations) on TensorBoard
+
+summary_feature_maps(data, input_op, feature_maps, sess, batch_limit=3, feature_map_limit=3)
+
 ```
 import visualizer
 
@@ -36,6 +39,10 @@ with tf.Session() as sess:
 ```
 
 ### Visualize filters(weights, kernels) on TensorBoard
+
+summary_filter(filters, filter_summary_limit=3):
+summary_filters(filter_list, layer_input_limit=3, layer_output_limit=3)
+
 ```
 import visualizer
 
