@@ -54,7 +54,7 @@ regularizers = (tf.nn.l2_loss(fc1_weights) + tf.nn.l2_loss(fc1_biases) +
                 tf.nn.l2_loss(fc2_weights) + tf.nn.l2_loss(fc2_biases))
 loss += 5e-4 * regularizers
 
-optimizer = tf.train.MomentumOptimizer(0.01, 0.9).minimize(loss)
+optimizer = tf.train.MomentumOptimizer(0.1, 0.9).minimize(loss)
 
 train_prediction = tf.nn.softmax(logits)
 
@@ -77,7 +77,7 @@ with tf.Session() as sess:
                    1000 * elapsed_time / 100))
             print('Minibatch loss: %.3f' % loss_result)
 
-    visualizer.summary_feature_maps(validation_data[0:16], inputs, end_points, sess)
+    visualizer.summary_feature_maps(validation_data[0:batch_size], inputs, end_points, sess)
 
     merged = tf.summary.merge_all()
     if not os.path.isdir(FLAGS.summary_path):
