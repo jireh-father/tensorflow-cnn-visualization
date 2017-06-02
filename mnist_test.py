@@ -19,7 +19,7 @@ inputs = tf.placeholder(tf.float16, [batch_size, image_size, image_size, image_c
 labels = tf.placeholder(tf.int64, [batch_size, ])
 
 conv1_weights = tf.Variable(tf.truncated_normal([5, 5, image_channel, 32], stddev=0.1, dtype=tf.float16))
-visualizer.summary_first_filters(conv1_weights, 32)
+visualizer.summary_filter(conv1_weights, 32)
 conv1_biases = tf.Variable(tf.zeros([32], dtype=tf.float16))
 conv2_weights = tf.Variable(tf.truncated_normal([5, 5, 32, 64], stddev=0.1, dtype=tf.float16))
 conv2_biases = tf.Variable(tf.constant(0.1, shape=[64], dtype=tf.float16))
