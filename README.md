@@ -3,6 +3,16 @@ Visualizing cnn feature maps and filters on tensorboard.
 
 ## mnist visualization example
 
+```shell
+python mnist_test.py --summary_path=yourpath
+
+# after training
+cd yourpath
+
+tensorboard --logdir=./ --host=0.0.0.0
+```
+
+
 ### conv layers
 ![alt text](https://raw.githubusercontent.com/jireh-father/tensorflow-cnn-visualization/master/img/feature_map_visualization_conv.jpg)
 
@@ -98,16 +108,4 @@ with tf.Session() as sess:
     summary = sess.run(merged, feed_dict={inputs: validation_sample_data})
     writer.add_summary(summary, 0)
     writer.close()
-```
-
-
-## mnist test
-
-```shell
-python mnist_test.py --summary_path=yourpath
-
-# after training
-cd yourpath
-
-tensorboard --logdir=./ --host=0.0.0.0
 ```
