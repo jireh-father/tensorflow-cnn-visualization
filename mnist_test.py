@@ -19,7 +19,6 @@ inputs = tf.placeholder(tf.float16, [batch_size, image_size, image_size, image_c
 labels = tf.placeholder(tf.int64, [batch_size, ])
 
 conv1_weights = tf.Variable(tf.truncated_normal([5, 5, image_channel, 32], stddev=0.1, dtype=tf.float16))
-visualizer.summary_filter(conv1_weights, 32)
 conv1_biases = tf.Variable(tf.zeros([32], dtype=tf.float16))
 conv2_weights = tf.Variable(tf.truncated_normal([5, 5, 32, 64], stddev=0.1, dtype=tf.float16))
 conv2_biases = tf.Variable(tf.constant(0.1, shape=[64], dtype=tf.float16))
@@ -27,6 +26,8 @@ fc1_weights = tf.Variable(tf.truncated_normal([7 * 7 * 64, 512], stddev=0.1, dty
 fc1_biases = tf.Variable(tf.constant(0.1, shape=[512], dtype=tf.float16))
 fc2_weights = tf.Variable(tf.truncated_normal([512, label_cnt], stddev=0.1, dtype=tf.float16))
 fc2_biases = tf.Variable(tf.constant(0.1, shape=[label_cnt], dtype=tf.float16))
+
+visualizer.summary_filters([conv1_weights, conv2_weights], 32)
 
 end_points = {}
 conv = tf.nn.conv2d(inputs, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
