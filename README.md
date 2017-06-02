@@ -1,7 +1,7 @@
 # tensorflow-cnn-visualization
 Visualizing cnn feature maps and filters on tensorboard.
 
-## mnist visualization
+## mnist visualization example
 
 ### conv layers
 ![alt text](https://raw.githubusercontent.com/jireh-father/tensorflow-cnn-visualization/master/img/feature_map_visualization_conv.jpg)
@@ -19,6 +19,14 @@ Visualizing cnn feature maps and filters on tensorboard.
 
 #### summary feature maps function
 summary_feature_maps(data, input_op, feature_maps, sess, batch_limit=3, feature_map_limit=3)
+
+```python
+import visualizer
+
+visualizer.summary_feature_maps(validation_sample_data, inputs, end_points, sess)
+```
+
+#### example code
 
 ```python
 import visualizer
@@ -62,6 +70,14 @@ summary_filters(filter_list, layer_input_limit=3, layer_output_limit=3)
 ```python
 import visualizer
 
+visualizer.summary_filters([conv1_weights, conv2_weights])
+```
+
+#### example code
+
+```python
+import visualizer
+
 ...
 
 conv1_weights = tf.Variable(tf.truncated_normal([5, 5, image_channel, 32], stddev=0.1, dtype=tf.float16))
@@ -85,7 +101,7 @@ with tf.Session() as sess:
 ```
 
 
-## Test
+## mnist test
 
 ```shell
 python mnist_test.py --summary_path=yourpath
