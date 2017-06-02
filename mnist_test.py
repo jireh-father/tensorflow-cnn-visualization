@@ -20,6 +20,7 @@ labels = tf.placeholder(tf.int64, [batch_size, ])
 
 end_points = {}
 
+# 2 conv layers + 2 fc layers
 conv1_weights = tf.Variable(tf.truncated_normal([5, 5, image_channel, 32], stddev=0.1, dtype=tf.float16))
 conv1_biases = tf.Variable(tf.zeros([32], dtype=tf.float16))
 conv = tf.nn.conv2d(inputs, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
