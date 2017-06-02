@@ -7,7 +7,7 @@ def convert_weights(weights):
     weights_0_to_1 = (weights - x_min) / (x_max - x_min)
     weights_0_to_255_uint8 = tf.image.convert_image_dtype(weights_0_to_1, dtype=tf.uint8)
 
-    return tf.transpose(weights_0_to_1, [3, 0, 1, 2])
+    return tf.transpose(weights_0_to_255_uint8, [3, 0, 1, 2])
 
 
 def summary_filter(weights, filter_summary_limit=3):
