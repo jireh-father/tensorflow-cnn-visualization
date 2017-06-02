@@ -22,26 +22,29 @@ visualizer.summary_first_filters(conv1_weights)
 conv1_biases = tf.Variable(tf.zeros([32], dtype=tf.float16))
 conv2_weights = tf.Variable(tf.truncated_normal([5, 5, 32, 64], stddev=0.1, dtype=tf.float16))
 conv2_biases = tf.Variable(tf.constant(0.1, shape=[64], dtype=tf.float16))
-fc1_weights = tf.Variable(
-    tf.truncated_normal([image_size // 4 * image_size // 4 * 64, 512], stddev=0.1, dtype=tf.float16))
+fc1_weights = tf.Variable(tf.truncated_normal([5 * 5 * 64, 512], stddev=0.1, dtype=tf.float16))
 fc1_biases = tf.Variable(tf.constant(0.1, shape=[512], dtype=tf.float16))
 fc2_weights = tf.Variable(tf.truncated_normal([512, label_cnt], stddev=0.1, dtype=tf.float16))
 fc2_biases = tf.Variable(tf.constant(0.1, shape=[label_cnt], dtype=tf.float16))
+
 end_points = {}
 conv = tf.nn.conv2d(inputs, conv1_weights, strides=[1, 1, 1, 1], padding='SAME')
 relu = tf.nn.relu(tf.nn.bias_add(conv, conv1_biases))
 end_points["conv1"] = conv
+
 pool = tf.nn.max_pool(relu, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 end_points["pool1"] = pool
+
 conv = tf.nn.conv2d(pool, conv2_weights, strides=[1, 1, 1, 1], padding='SAME')
 relu = tf.nn.relu(tf.nn.bias_add(conv, conv2_biases))
 end_points["conv2"] = conv
+
 pool = tf.nn.max_pool(relu, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 end_points["pool2"] = pool
-pool_shape = pool.get_shape().as_list()
-reshape = tf.reshape(pool, [pool_shape[0], pool_shape[1] * pool_shape[2] * pool_shape[3]], name="pool2_reshape")
-hidden = tf.nn.relu(tf.matmul(reshape, fc1_weights) + fc1_biases)
 
+pool_shape = pool.get_shape().as_list()
+reshape = tf.reshape(-1, fc1_weights.get_shape().as_list()[0], name="pool2_reshape")
+hidden = tf.nn.relu(tf.matmul(reshape, fc1_weights) + fc1_biases)
 hidden = tf.nn.dropout(hidden, 0.5)
 logits = tf.matmul(hidden, fc2_weights) + fc2_biases
 
