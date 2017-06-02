@@ -21,10 +21,10 @@ def summary_filters(weights_list, batch_limit=3, feature_map_limit=3):
         summary_name = "filter_visualization/layer%d" % weight_idx
         for i in range(weights_transposed.shape[0]):
             if weights_transposed.shape[3] == 3:
-                tf.summary.image("%s/%d" % (summary_name, i), weights_transposed[i:i + 1, :, :, :])
+                tf.summary.image("%s_%d" % (summary_name, i), weights_transposed[i:i + 1, :, :, :])
             else:
                 for j in range(weights_transposed.shape[3]):
-                    tf.summary.image("%s/%d/filter%d" % (summary_name, i, j),
+                    tf.summary.image("%s_%d/filter%d" % (summary_name, i, j),
                                      weights_transposed[i:i + 1, :, :, j:j + 1])
                     if j + 1 >= feature_map_limit:
                         break
@@ -39,7 +39,7 @@ def summary_feature_maps(inputs, input_ph, feature_maps, sess, batch_limit=3, fe
             continue
         for i in range(units[key].shape[0]):
             for j in range(units[key].shape[3]):
-                tf.summary.image("%s/%s/%d" % ('activation_visualization', key, j), units[key][i:i + 1, :, :, j:j + 1])
+                tf.summary.image("%s_%s/%d" % ('feature_map_visualization', key, j), units[key][i:i + 1, :, :, j:j + 1])
                 if j + 1 >= feature_map_limit:
                     break
             if i + 1 >= batch_limit:
