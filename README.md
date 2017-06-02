@@ -1,6 +1,18 @@
 # tensorflow-cnn-visualization
 Visualizing cnn feature maps and filters on tensorboard.
 
+## mnist visualization
+
+### conv layers
+![alt text](https://raw.githubusercontent.com/jireh-father/tensorflow-cnn-visualization/master/img/feature_map_visualization_conv.jpg)
+
+### pooling layers
+![alt text](https://raw.githubusercontent.com/jireh-father/tensorflow-cnn-visualization/master/img/feature_map_visualization_pooling.jpg)
+
+### filters
+![alt text](https://raw.githubusercontent.com/jireh-father/tensorflow-cnn-visualization/master/img/filter_visualization.jpg)
+
+
 ## Usage
 
 ### Visualize feature maps(activations) on TensorBoard
@@ -72,13 +84,10 @@ with tf.Session() as sess:
 ## Test
 
 ```
-
 python mnist_test.py --summary_path=yourpath
 
 # after training
 cd yourpath
 
 tensorboard --logdir=./ --host=0.0.0.0
-
-
 ```
