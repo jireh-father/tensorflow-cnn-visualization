@@ -132,7 +132,10 @@ def write_projector_config(config, tensor_name, output_path, image_size, channel
     embedding.tensor_name = tensor_name
     embedding.metadata_path = os.path.join(output_path, 'labels.tsv')
     embedding.sprite.image_path = os.path.join(output_path, 'sprite.png')
-    embedding.sprite.single_image_dim.extend([image_size, image_size, channel])
+    if channel == 1:
+        embedding.sprite.single_image_dim.extend([image_size, image_size])
+    else:
+        embedding.sprite.single_image_dim.extend([image_size, image_size, channel])
     projector.visualize_embeddings(summary_writer, config)
 
 
