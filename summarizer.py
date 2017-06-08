@@ -12,8 +12,8 @@ def summary_embedding_with_labels(sess, dataset, labels, layer_op_list, input_pl
     summary_embedding(sess, dataset, labels, layer_outputs, image_size, channel, summary_dir)
 
 
-def summary_embedding_no_labels(sess, dataset, layer_op_list, input_placeholder, argmax_op, summary_dir, image_size,
-                                channel=3, batch_size=100):
+def summary_embedding_no_labels(sess, dataset, layer_op_list, input_placeholder, summary_dir, image_size,
+                                argmax_op=None, channel=3, batch_size=100):
     layer_outputs, labels = run_layers_test(sess, layer_op_list, dataset, input_placeholder, argmax_op, batch_size)
 
     summary_embedding(sess, dataset, labels, layer_outputs, image_size, channel, summary_dir)
@@ -29,14 +29,15 @@ def summary_embedding(sess, dataset, labels, layer_outputs, image_size, channel,
     embed_tensors = []
     for embed_idx, embed_vectors in enumerate(layer_outputs):
         tensor_name = make_embed_tensor(sess, embed_vectors, embed_idx, embed_tensors)
-        write_projector_config(config, tensor_name, output_path, image_size, channel, summary_writer)
+        write_projector_config(config, tensor_name, output_path, image_size, channel, summary_writer, labels)
     summary_writer.close()
 
     save_model(sess, embed_tensors, output_path)
 
     # Make sprite and labels.
     make_sprite(dataset, image_size, channel, output_path)
-    make_metadata(labels, output_path)
+    if labels:
+        make_metadata(labels, output_path)
 
 
 def run_layers(sess, layer_op_list, images, input_placeholder, batch_size=32):
@@ -52,7 +53,7 @@ def run_layers(sess, layer_op_list, images, input_placeholder, batch_size=32):
     return layer_outputs
 
 
-def run_layers_test(sess, layer_op_list, images, input_placeholder, argmax_op, batch_size=32):
+def run_layers_test(sess, layer_op_list, images, input_placeholder, argmax_op=None, batch_size=32):
     layer_outputs = [[] for i in range(len(layer_op_list))]
     argmax_outputs = []
 
@@ -61,12 +62,16 @@ def run_layers_test(sess, layer_op_list, images, input_placeholder, argmax_op, b
         if len(batch_data) < batch_size:
             break
         feed_dict = {input_placeholder: images[i:i + batch_size]}
-        results = sess.run(layer_op_list + [argmax_op], feed_dict=feed_dict)
+        if argmax_op:
+            results = sess.run(layer_op_list + [argmax_op], feed_dict=feed_dict)
+        else:
+            results = sess.run(layer_op_list, feed_dict=feed_dict)
 
         for j, layer_output in enumerate(layer_outputs):
             layer_output.append(results[j])
 
-        argmax_outputs.append(results[-1])
+        if argmax_op:
+            argmax_outputs.append(results[-1])
 
     return layer_outputs, argmax_outputs
 
@@ -127,10 +132,11 @@ def make_embed_tensor(sess, embed_vectors, embed_idx, embed_tensors):
     return embed_tensor.name
 
 
-def write_projector_config(config, tensor_name, output_path, image_size, channel, summary_writer):
+def write_projector_config(config, tensor_name, output_path, image_size, channel, summary_writer, labels):
     embedding = config.embeddings.add()
     embedding.tensor_name = tensor_name
-    embedding.metadata_path = os.path.join(output_path, 'labels.tsv')
+    if labels:
+        embedding.metadata_path = os.path.join(output_path, 'labels.tsv')
     embedding.sprite.image_path = os.path.join(output_path, 'sprite.png')
     if channel == 1:
         embedding.sprite.single_image_dim.extend([image_size, image_size])
