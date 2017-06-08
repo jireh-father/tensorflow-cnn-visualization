@@ -4,6 +4,7 @@ import os
 import mnist_loader as loader
 import visualizer
 import time
+import summarizer
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -92,3 +93,7 @@ with tf.Session() as sess:
     summary = sess.run(merged, feed_dict={inputs: validation_sample})
     writer.add_summary(summary, 0)
     writer.close()
+
+    summarizer.summary_embedding_with_labels(sess, validation_data[0:batch_size], validation_labels[0:batch_size],
+                                             [relu, logits], inputs, FLAGS.summary_path, image_size, channel=1,
+                                             batch_size=batch_size)
