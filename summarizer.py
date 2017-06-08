@@ -36,7 +36,7 @@ def summary_embedding(sess, dataset, labels, layer_outputs, image_size, channel,
 
     # Make sprite and labels.
     make_sprite(dataset, image_size, channel, output_path)
-    if labels:
+    if labels is not None and len(labels) > 0:
         make_metadata(labels, output_path)
 
 
@@ -62,7 +62,7 @@ def run_layers_test(sess, layer_op_list, images, input_placeholder, argmax_op=No
         if len(batch_data) < batch_size:
             break
         feed_dict = {input_placeholder: images[i:i + batch_size]}
-        if argmax_op:
+        if argmax_op is not None:
             results = sess.run(layer_op_list + [argmax_op], feed_dict=feed_dict)
         else:
             results = sess.run(layer_op_list, feed_dict=feed_dict)
@@ -70,7 +70,7 @@ def run_layers_test(sess, layer_op_list, images, input_placeholder, argmax_op=No
         for j, layer_output in enumerate(layer_outputs):
             layer_output.append(results[j])
 
-        if argmax_op:
+        if argmax_op is not None:
             argmax_outputs.append(results[-1])
 
     return layer_outputs, argmax_outputs
@@ -135,7 +135,7 @@ def make_embed_tensor(sess, embed_vectors, embed_idx, embed_tensors):
 def write_projector_config(config, tensor_name, output_path, image_size, channel, summary_writer, labels):
     embedding = config.embeddings.add()
     embedding.tensor_name = tensor_name
-    if labels:
+    if labels is not None and len(labels) > 0:
         embedding.metadata_path = os.path.join(output_path, 'labels.tsv')
     embedding.sprite.image_path = os.path.join(output_path, 'sprite.png')
     if channel == 1:
