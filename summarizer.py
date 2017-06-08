@@ -102,7 +102,10 @@ def images_to_sprite(data):
 
 
 def make_sprite(dataset, image_size, channel, output_path):
-    images = np.array(dataset).reshape((-1, image_size, image_size, channel)).astype(np.float32)
+    if channel == 1:
+        images = np.array(dataset).reshape((-1, image_size, image_size)).astype(np.float32)
+    else:
+        images = np.array(dataset).reshape((-1, image_size, image_size, channel)).astype(np.float32)
     sprite = images_to_sprite(images)
     scipy.misc.imsave(os.path.join(output_path, 'sprite.png'), sprite)
 
