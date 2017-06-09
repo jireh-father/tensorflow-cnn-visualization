@@ -4,7 +4,6 @@ import os
 import mnist_loader as loader
 import visualizer
 import time
-import summarizer
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -85,10 +84,6 @@ with tf.Session() as sess:
     # summary feature maps of validation data
     visualizer.summary_feature_maps(validation_sample, inputs, end_points, sess, 3, 10)
 
-    summarizer.summary_embedding_with_labels(sess, validation_data[0:batch_size], validation_labels[0:batch_size],
-                                             [conv], inputs, FLAGS.summary_path, image_size, channel=image_channel,
-                                             batch_size=batch_size)
-
     # write all summaries
     merged = tf.summary.merge_all()
     if not os.path.isdir(FLAGS.summary_path):
@@ -97,9 +92,3 @@ with tf.Session() as sess:
     summary = sess.run(merged, feed_dict={inputs: validation_sample})
     writer.add_summary(summary, 0)
     writer.close()
-
-
-
-    # summarizer.summary_embedding_no_labels(sess, validation_data[0:batch_size],
-    #                                        [logits], inputs, FLAGS.summary_path, image_size, channel=image_channel,
-    #                                        batch_size=batch_size)
